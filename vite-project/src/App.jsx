@@ -1,18 +1,25 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import {createTheme, MantineProvider} from '@mantine/core';
+import {createTheme, MantineProvider, useMantineTheme} from '@mantine/core';
 import '@mantine/core/styles.css';
-import { Button } from '@mantine/core';
+import { TextInput, Button, Container, Title, Text, Box, Paper } from '@mantine/core';
 
 
-function App() {
+const myTheme = createTheme({
+  colors: {
+    myColor: [
+      '#f271aa',
+      '#ef4991',
+      '#ee3482',
+      '#ef297a',
+      '#d41f68',
+      '#bd175c',
+      '#a6074f'
+    ]
+  }
+});
+function ChatApp() {
   const [count, setCount] = useState(0)
-  const theme = createTheme({
-    fontFamily: 'Open Sans, sans-serif',
-    primaryColor: 'cyan',
-  });
   const [input, setInput] = useState('');
   const [response, setResponse] = useState(null);
 
@@ -39,16 +46,39 @@ function App() {
   };
 
   return (
-    <MantineProvider defaultColorScheme="dark">
-    <div className="App">
-      <header className="App-header">
-      <input type="text" value={input} onChange={e => setInput(e.target.value)} />
-        <button onClick={handleClick}>Send</button>
-        {response && <p>{response}</p>}
-      </header>
-    </div>
+    <Box sx={{ maxWidth: 500, margin: 'auto', padding: '20px' }}>
+      {response && (
+        <Paper 
+          padding="lg"
+          style={{ 
+            marginBottom: '20px',
+            maxHeight: '300px',
+            overflowY: 'auto' // Enable scrolling for long responses
+          }}
+        >
+          <Text>{response}</Text>
+        </Paper>
+      )}
+      <TextInput
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Type your message here"
+        mb="sm"
+        style={{ marginBottom: '10px' }}
+      />
+      <Button color='myColor' onClick={handleClick} fullWidth>
+        Send
+      </Button>
+    </Box>
+  );
+}
+
+function App() {
+  return (
+    <MantineProvider theme={myTheme}>
+      <ChatApp />
     </MantineProvider>
   );
 }
 
-export default App
+export default App;
